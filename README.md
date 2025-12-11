@@ -20,6 +20,12 @@ Based on the paper:
 pip install git+https://github.com/soumojitdas/binagg.git
 ```
 
+### Upgrade to Latest Version
+
+```bash
+pip uninstall binagg -y && pip install git+https://github.com/soumojitdas/binagg.git
+```
+
 ### From Source (For Development)
 
 ```bash
