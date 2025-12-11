@@ -1,6 +1,14 @@
 # Claude Code
 .claude/
 
+# Original notebooks and data (not part of package)
+BinAgg/
+__MACOSX/
+*.pdf
+PACKAGE_PLAN.md
+PUBLISHING.md
+*.zip
+
 # Python
 __pycache__/
 *.py[cod]
