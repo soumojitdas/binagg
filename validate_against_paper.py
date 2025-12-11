@@ -51,6 +51,7 @@ def run_validation(n_simulations=100, verbose=True):
 
     coverages = []
     estimates = []
+    theoretical_ses = []  # Store SE from each simulation
     n_bins_list = []
 
     print(f"Running {n_simulations} simulations...")
@@ -83,6 +84,7 @@ def run_validation(n_simulations=100, verbose=True):
 
         coverages.append(cover)
         estimates.append(result.coefficients)
+        theoretical_ses.append(result.standard_errors)  # Collect theoretical SE
         n_bins_list.append(K)
 
         if verbose and (sim + 1) % 20 == 0:
@@ -91,33 +93,40 @@ def run_validation(n_simulations=100, verbose=True):
     # Compute summary statistics
     coverages = np.array(coverages)
     estimates = np.array(estimates)
+    theoretical_ses = np.array(theoretical_ses)
 
     mean_coverage = np.mean(coverages, axis=0)
     overall_coverage = np.mean(coverages)
     mean_bias = np.mean(estimates - true_coeffs, axis=0)
     empirical_se = np.std(estimates, axis=0)
+    avg_theoretical_se = np.mean(theoretical_ses, axis=0)  # Average of estimated SEs
     mean_bins = np.mean(n_bins_list)
 
-    print("\n" + "=" * 60)
+    print("\n" + "=" * 70)
     print("VALIDATION RESULTS")
-    print("=" * 60)
+    print("=" * 70)
 
     print(f"\nNumber of bins: mean={mean_bins:.1f}, min={min(n_bins_list)}, max={max(n_bins_list)}")
 
     print(f"\nPer-coefficient results:")
-    print(f"{'Coef':<8} {'True':<8} {'Bias':<10} {'Emp SE':<10} {'Coverage':<10}")
-    print("-" * 46)
+    print(f"{'Coef':<8} {'True':<8} {'Bias':<10} {'Emp SE':<12} {'Theo SE':<12} {'Coverage':<10}")
+    print("-" * 70)
     for i in range(n_features):
         print(f"beta_{i:<3} {true_coeffs[i]:<8.3f} {mean_bias[i]:<10.4f} "
-              f"{empirical_se[i]:<10.4f} {mean_coverage[i]:<10.3f}")
+              f"{empirical_se[i]:<12.4f} {avg_theoretical_se[i]:<12.4f} {mean_coverage[i]:<10.3f}")
 
     print(f"\nOverall coverage: {overall_coverage:.3f}")
     print(f"Expected coverage: 0.950")
 
+    # SE comparison
+    se_ratio = avg_theoretical_se / empirical_se
+    print(f"\nSE Ratio (Theo/Emp): {se_ratio.round(3)}")
+    print("(Ratio close to 1.0 indicates well-calibrated standard errors)")
+
     # Validation check
-    print("\n" + "=" * 60)
+    print("\n" + "=" * 70)
     print("VALIDATION CHECK")
-    print("=" * 60)
+    print("=" * 70)
 
     passed = True
 
@@ -143,25 +152,35 @@ def run_validation(n_simulations=100, verbose=True):
         print(f"[FAIL] Max relative bias {max_rel_bias:.3f} is too large")
         passed = False
 
-    print("\n" + "=" * 60)
+    # SE ratio should be close to 1 (between 0.5 and 2.0)
+    mean_se_ratio = np.mean(se_ratio)
+    if 0.5 <= mean_se_ratio <= 2.0:
+        print(f"[PASS] Mean SE ratio {mean_se_ratio:.3f} is in acceptable range [0.5, 2.0]")
+    else:
+        print(f"[FAIL] Mean SE ratio {mean_se_ratio:.3f} is outside acceptable range")
+        passed = False
+
+    print("\n" + "=" * 70)
     if passed:
         print("OVERALL: VALIDATION PASSED")
     else:
         print("OVERALL: VALIDATION FAILED")
-    print("=" * 60)
+    print("=" * 70)
 
     return passed, {
         'coverage': overall_coverage,
         'mean_bins': mean_bins,
         'mean_bias': mean_bias,
-        'empirical_se': empirical_se
+        'empirical_se': empirical_se,
+        'avg_theoretical_se': avg_theoretical_se,
+        'se_ratio': se_ratio
     }
 
 
 if __name__ == "__main__":
     # Run with fewer simulations for quick validation
     # Use n_simulations=500+ for more accurate results
-    passed, results = run_validation(n_simulations=100)
+    passed, results = run_validation(n_simulations=1000)
 
     if not passed:
         sys.exit(1)
