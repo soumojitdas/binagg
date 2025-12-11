@@ -2,7 +2,7 @@
 .claude/
 
 # Original notebooks and data (not part of package)
-BinAgg/
+/BinAgg/
 __MACOSX/
 *.pdf
 PACKAGE_PLAN.md

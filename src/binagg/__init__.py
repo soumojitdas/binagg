@@ -23,6 +23,7 @@ from binagg.privacy import (
     mu_from_eps_delta,
     eps_from_mu_delta,
     compose_gdp,
+    allocate_budget,
 )
 
 from binagg.binning import (
@@ -52,6 +53,7 @@ __all__ = [
     "mu_from_eps_delta",
     "eps_from_mu_delta",
     "compose_gdp",
+    "allocate_budget",
     # Binning
     "BinAggResult",
     "privtree_binning",
