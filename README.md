@@ -14,11 +14,17 @@ Based on the paper:
 
 ## Installation
 
-### From Source (Recommended for Testing)
+### From GitHub (Recommended)
 
 ```bash
-# Clone or download the repository
-git clone https://github.com/yourusername/binagg.git
+pip install git+https://github.com/soumojitdas/binagg.git
+```
+
+### From Source (For Development)
+
+```bash
+# Clone the repository
+git clone https://github.com/soumojitdas/binagg.git
 cd binagg
 
 # Install in development mode
