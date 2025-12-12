@@ -258,7 +258,7 @@ If you use this package, please cite:
 
 ## Contributors
 
-- [Shuang Lin](https://github.com/Shuronglin/) - Original algorithm implementation and paper author
+- [Shurong Lin](https://github.com/Shuronglin/) - Original algorithm implementation and paper author
 - [Claude Code](https://claude.ai/claude-code) - AI assistant for packaging, testing, and documentation
 
 ## License
