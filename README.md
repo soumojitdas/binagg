@@ -7,9 +7,11 @@ Based on the paper:
 
 ## Features
 
+Based on algorithms from the paper:
+
+- **PrivTree Binning** (Algorithm 1): Adaptive differentially private data partitioning
 - **DP Linear Regression** (Algorithm 2): Bias-corrected weighted least squares with valid confidence intervals
 - **DP Synthetic Data Generation** (Algorithm 3): Generate privacy-preserving synthetic datasets
-- **PrivTree Binning** (Algorithm 1): Adaptive differentially private data partitioning
 - **GDP Privacy Accounting**: Tight composition using Gaussian Differential Privacy
 
 ## Installation
