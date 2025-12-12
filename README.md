@@ -67,9 +67,10 @@ X = np.random.uniform(0, 10, (n, d))
 true_beta = np.array([1.5, -2.0, 0.5])
 y = X @ true_beta + np.random.normal(0, 1, n)
 
-# Define bounds (required for DP)
-x_bounds = [(0, 10), (0, 10), (0, 10)]
-y_bounds = (y.min() - 1, y.max() + 1)
+# Define public domain bounds (required for DP, must be specified by analyst)
+# These should be known a priori and NOT computed from the private data
+x_bounds = [(0, 10), (0, 10), (0, 10)]  # Known domain for each feature
+y_bounds = (-30, 30)  # Known range for target variable
 
 # Run DP regression with μ=1.0 privacy budget
 result = dp_linear_regression(
@@ -143,8 +144,8 @@ Performs differentially private linear regression with bias correction.
 **Parameters:**
 - `X`: Feature matrix (n, d)
 - `y`: Target vector (n,)
-- `x_bounds`: List of (min, max) tuples for each feature
-- `y_bounds`: (min, max) tuple for target
+- `x_bounds`: List of (lower, upper) tuples - public domain bounds for each feature (specified by analyst, not computed from data)
+- `y_bounds`: (lower, upper) tuple - public domain bounds for target variable
 - `mu`: Privacy budget in μ-GDP
 - `theta`: Splitting threshold (default: 0, negative = more bins)
 - `alpha`: Significance level for CI (default: 0.05)
